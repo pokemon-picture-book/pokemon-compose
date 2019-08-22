@@ -1,14 +1,36 @@
-## swagger-tools-docker-compose
+## pokemon-compose
 ### 概要
-swagger-editor + swagger-ui + apisprout
+pokemon-api + pokemon-client + sonarqube + postgres + swagger-editor + swagger-ui + apisprout
 
 
 ### 起動
 
+* クローン
+
 ```
-git clone https://github.com/windii-legend/swagger-tools-docker-compose.git
+https://github.com/pokemon-picture-book/pokemon-compose.git
 ```
+
+* up
 
 ```
 docker-compose up -d
+```
+
+* down
+
+```
+docker-compose down && docker system prune -a
+```
+
+### プロセス確認
+
+```
+docker ps
+```
+
+### docker 環境へ ssh
+
+```
+docker-compose exec <サービス名> bash
 ```
