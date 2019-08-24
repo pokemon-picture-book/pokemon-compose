@@ -3,12 +3,16 @@ version: '3'
 services:
   swagger-editor:
     image: swaggerapi/swagger-editor
+    networks:
+      - swaggernet
     container_name: "swagger-editor"
     ports:
       - "8001:8080"
 
   swagger-ui:
     image: swaggerapi/swagger-ui
+    networks:
+      - swaggernet
     container_name: "swagger-ui"
     ports:
       - "8002:8080"
@@ -20,9 +24,43 @@ services:
 
   swagger-api:
     image: danielgtaylor/apisprout
+    networks:
+      - swaggernet
     container_name: "swagger-api"
     ports:
       - "8003:8000"
     volumes:
       - ./swagger-document/openapi.yaml:/openapi.yaml
     command: /openapi.yaml
+
+  sonarqube-db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - sonarnet
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - /var/lib/postgresql
+      - /var/lib/postgresql/data
+
+  sonarqube:
+    image: sonarqube
+    ports:
+      - "9000:9000"
+    networks:
+      - sonarnet
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://sonarqube-db:5432/sonar
+    volumes:
+      - /opt/sonarqube/conf
+      - /opt/sonarqube/data
+      - /opt/sonarqube/extensions
+
+networks:
+  swaggernet:
+    driver: bridge
+  sonarnet:
+    driver: bridge
