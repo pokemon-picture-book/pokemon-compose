@@ -8,29 +8,31 @@ pokemon-api + pokemon-client + sonarqube + postgres + swagger-editor + swagger-u
 * クローン
 
 ```
-https://github.com/pokemon-picture-book/pokemon-compose.git
+$ git clone https://github.com/pokemon-picture-book/pokemon-compose.git
 ```
 
 * up
 
 ```
-docker-compose up -d
+$ docker-compose up -d
+or
+$ docker-compose up --build --remove-orphans
 ```
 
 * down
 
 ```
-docker-compose down && docker system prune -a
+$ docker-compose down && docker system prune -a
 ```
 
 ### プロセス確認
 
 ```
-docker ps
+$ docker-compose ps
 ```
 
 ### docker 環境へ ssh
 
 ```
-docker-compose exec <サービス名> bash
+$ docker-compose exec <サービス名> bash
 ```
