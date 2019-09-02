@@ -35,23 +35,23 @@ services:
 
   sonarqube-db:
     image: postgres
+    container_name: 'sonarqube-db'
     ports:
       - "5432:5432"
-    networks:
-      - sonarnet
     environment:
+      - POSTGRES_DB=sonar
       - POSTGRES_USER=sonar
       - POSTGRES_PASSWORD=sonar
     volumes:
-      - /var/lib/postgresql
-      - /var/lib/postgresql/data
+      - ./sonar_db:/var/lib/postgresql/data
 
   sonarqube:
     image: sonarqube
+    depends_on:
+      - sonarqube-db
+    container_name: 'sonarqube'
     ports:
       - "9000:9000"
-    networks:
-      - sonarnet
     environment:
       - sonar.jdbc.url=jdbc:postgresql://sonarqube-db:5432/sonar
     volumes:
@@ -59,8 +59,48 @@ services:
       - /opt/sonarqube/data
       - /opt/sonarqube/extensions
 
+  pokemon-db:
+    image: postgres
+    container_name: 'pokemon-db'
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=pokemon
+      - POSTGRES_USER=pokemon
+      - POSTGRES_PASSWORD=pokemon
+    volumes:
+      - ./poke_db:/var/lib/postgresql/data
+
+  pokemon-api:
+    tty: true
+    build:
+      context: ../pokemon-api
+      dockerfile: Dev.Dockerfile
+    depends_on:
+      - sonarqube-db
+      - sonarqube
+      - pokemon-db
+    container_name: 'pokemon-api'
+    volumes:
+      - ../pokemon-api/:/usr/app/
+      - /usr/app/node_modules
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: '80'
+      DB_CONFIG: |
+        {
+          "host": "host.docker.internal",
+          "database": "pokemon",
+          "username": "pokemon",
+          "password": "pokemon",
+          "port": "5433"
+        }
+    ports:
+      - '3001:80'
+      - '9001:9001'
+    entrypoint: './scripts/dev.sh'
+
 networks:
   swaggernet:
-    driver: bridge
-  sonarnet:
     driver: bridge
