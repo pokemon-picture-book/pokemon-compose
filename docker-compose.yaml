@@ -43,7 +43,7 @@ services:
       - POSTGRES_USER=sonar
       - POSTGRES_PASSWORD=sonar
     volumes:
-      - ./sonar_db:/var/lib/postgresql/data
+      - /var/lib/postgresql/data
 
   sonarqube:
     image: sonarqube
@@ -69,7 +69,7 @@ services:
       - POSTGRES_USER=pokemon
       - POSTGRES_PASSWORD=pokemon
     volumes:
-      - ./poke_db:/var/lib/postgresql/data
+      - /var/lib/postgresql/data
 
   pokemon-api:
     tty: true
