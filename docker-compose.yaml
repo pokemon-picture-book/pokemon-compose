@@ -42,6 +42,7 @@ services:
       - POSTGRES_DB=sonar
       - POSTGRES_USER=sonar
       - POSTGRES_PASSWORD=sonar
+      - TZ=Japan
     volumes:
       - /var/lib/postgresql/data
 
@@ -68,6 +69,7 @@ services:
       - POSTGRES_DB=pokemon
       - POSTGRES_USER=pokemon
       - POSTGRES_PASSWORD=pokemon
+      - TZ=Japan
     volumes:
       - /var/lib/postgresql/data
 
