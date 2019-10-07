@@ -101,6 +101,21 @@ services:
       - '9001:9001'
     entrypoint: './scripts/dev.sh'
 
+  pokemon-client:
+    tty: true
+    build:
+      context: ../pokemon-client
+      dockerfile: Dev.Dockerfile
+    volumes:
+      - ../pokemon-client/:/usr/app/
+      - /usr/app/node_modules
+    environment:
+      NODE_ENV: development
+      API_BASE_URL: 'http://localhost:3001/'
+    ports:
+      - '5000:5000'
+    entrypoint: ./scripts/dev.sh
+
 networks:
   swaggernet:
     driver: bridge
