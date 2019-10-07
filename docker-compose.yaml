@@ -60,7 +60,7 @@ services:
       - /opt/sonarqube/extensions
 
   pokemon-db:
-    image: postgres
+    image: postgres:9.6
     container_name: 'pokemon-db'
     ports:
       - "5433:5432"
@@ -77,9 +77,9 @@ services:
       context: ../pokemon-api
       dockerfile: Dev.Dockerfile
     depends_on:
+      - pokemon-db
       - sonarqube-db
       - sonarqube
-      - pokemon-db
     container_name: 'pokemon-api'
     volumes:
       - ../pokemon-api/:/usr/app/
