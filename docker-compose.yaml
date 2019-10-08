@@ -34,7 +34,7 @@ services:
     command: /openapi.yaml
 
   sonarqube-db:
-    image: postgres
+    image: postgres:9.6
     container_name: 'sonarqube-db'
     ports:
       - "5432:5432"
