@@ -86,8 +86,8 @@ services:
       - /usr/app/node_modules
     environment:
       NODE_ENV: development
-      HOST: 0.0.0.0
-      PORT: '80'
+      HOST: '0.0.0.0'
+      PORT: '3001'
       DB_CONFIG: |
         {
           "host": "host.docker.internal",
@@ -97,8 +97,7 @@ services:
           "port": "5433"
         }
     ports:
-      - '3001:80'
-      - '9001:9001'
+      - '3001:3001'
     entrypoint: './scripts/dev.sh'
 
   pokemon-client:
