@@ -45,7 +45,7 @@ services:
       - /var/lib/postgresql/data
 
   sonarqube:
-    image: sonarqube
+    image: sonarqube:7.1
     depends_on:
       - sonarqube-db
     container_name: 'sonarqube'
