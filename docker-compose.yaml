@@ -68,7 +68,7 @@ services:
       - POSTGRES_USER=pokemon
       - POSTGRES_PASSWORD=pokemon
     volumes:
-      - /var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
 
   pokemon-api:
     tty: true
