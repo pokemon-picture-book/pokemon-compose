@@ -59,16 +59,21 @@ services:
       - /opt/sonarqube/extensions
 
   pokemon-db:
-    image: postgres:9.6
-    container_name: 'pokemon-db'
-    ports:
-      - "5433:5432"
+    image: mysql:5.7
+    container_name: pokemon-db
     environment:
-      - POSTGRES_DB=pokemon
-      - POSTGRES_USER=pokemon
-      - POSTGRES_PASSWORD=pokemon
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pokemon
+      MYSQL_USER: pokemon
+      MYSQL_PASSWORD: pokemon
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ./data/mysql/data:/var/lib/mysql
+      - ./data/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./data/mysql/sql:/docker-entrypoint-initdb.d
+    ports:
+      - 3307:3306
 
   pokemon-api:
     tty: true
@@ -97,10 +102,10 @@ services:
           "database": "pokemon",
           "username": "pokemon",
           "password": "pokemon",
-          "port": "5433"
+          "port": 3307
         }
     ports:
-      - '3001:3001'
+      - 3001:3001
     entrypoint: './scripts/dev.sh'
 
   pokemon-client:
