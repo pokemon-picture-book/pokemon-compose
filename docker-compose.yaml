@@ -82,9 +82,7 @@ services:
       swagger_link:
         aliases:
           - local.swagger.apisprout
-    build:
-      context: ../pokemon-api
-      dockerfile: Dev.Dockerfile
+    build: ../pokemon-api
     depends_on:
       - pokemon-db
       - sonarqube-db
@@ -94,7 +92,7 @@ services:
       - ../pokemon-api/:/usr/app/
       - /usr/app/node_modules
     environment:
-      NODE_ENV: development
+      TZ: 'Asia/Tokyo'
       HOST: '0.0.0.0'
       PORT: '3001'
       DB_CONFIG: |
@@ -107,7 +105,7 @@ services:
         }
     ports:
       - 3001:3001
-    entrypoint: './scripts/dev.sh'
+    entrypoint: ./docker-entrypoint/dev.sh
 
   pokemon-client:
     tty: true
