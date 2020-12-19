@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  pokemon-db:
+    image: mysql:5.7
+    container_name: pokemon-db
+    environment:
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./data/mysql/data:/var/lib/mysql
+      - ./data/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./data/mysql/sql:/docker-entrypoint-initdb.d
+
+  pokemon-api:
+    tty: true
+    build:
+      context: ../pokemon-api
+    depends_on:
+      - pokemon-db
+    container_name: 'pokemon-api'
+    environment:
+      TZ: 'Asia/Tokyo'
+
+  pokemon-web:
+    tty: true
+    build:
+      context: ../pokemon-web
+    container_name: 'pokemon-web'

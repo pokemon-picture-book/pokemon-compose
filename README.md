@@ -11,18 +11,20 @@ pokemon-api + pokemon-client + sonarqube + postgres + swagger-editor + swagger-u
 $ git clone https://github.com/pokemon-picture-book/pokemon-compose.git
 ```
 
-* up
-
+* Makefile 操作
 ```
-$ docker-compose up -d
-or
-$ docker-compose up --build --remove-orphans
-```
+# プロセス確認
+make ps
 
-* down
+# ローカル開発
+$ make rebuild
+$ make up
+$ make down
 
-```
-$ docker-compose down && docker system prune -a
+# 本番環境
+$ make rebuild e=prod
+$ make up e=prod
+$ make down e=prod
 ```
 
 * トラブルシューティング
@@ -38,12 +40,6 @@ ERROR: Network swagger_link declared as external, but could not be found. Please
 
 ```
 $ docker network create swagger_link
-```
-
-### プロセス確認
-
-```
-$ docker-compose ps
 ```
 
 ### docker 環境へ ssh

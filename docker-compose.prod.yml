@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  pokemon-db:
+    environment:
+      # TODO: 本番環境の接続設定が決定したら以下を書き換えること
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pokemon
+      MYSQL_USER: pokemon
+      MYSQL_PASSWORD: pokemon
+    ports:
+      - 3307:3306
+
+  pokemon-api:
+    environment:
+      NODE_ENV: production
+      HOST: '0.0.0.0'
+      PORT: '80'
+      # TODO: 本番環境の接続設定が決定したら以下を書き換えること
+      DB_CONFIG: |
+        {
+          "host": "host.docker.internal",
+          "database": "pokemon",
+          "username": "pokemon",
+          "password": "pokemon",
+          "port": 3307
+        }
+    ports:
+      - 3001:80
+    command: >
+      bash -c '
+        npm run migrate:run &&
+        npm start
+      '
+
+  pokemon-web:
+    environment:
+      NODE_ENV: production
+      API_BASE_URL: 'http://localhost:3001/'
+    ports:
+      - '8080:80'

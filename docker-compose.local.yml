@@ -62,39 +62,26 @@ services:
       - /opt/sonarqube/extensions
 
   pokemon-db:
-    image: mysql:5.7
-    container_name: pokemon-db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: pokemon
       MYSQL_USER: pokemon
       MYSQL_PASSWORD: pokemon
-      TZ: 'Asia/Tokyo'
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-      - ./data/mysql/data:/var/lib/mysql
-      - ./data/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./data/mysql/sql:/docker-entrypoint-initdb.d
     ports:
       - 3307:3306
 
   pokemon-api:
-    tty: true
     networks:
       swagger_link:
         aliases:
           - local.swagger.apisprout
-    build: ../pokemon-api
+    build:
+      dockerfile: Dev.Dockerfile
     depends_on:
-      - pokemon-db
       - sonarqube-db
       - sonarqube
-    container_name: 'pokemon-api'
-    volumes:
-      - ../pokemon-api/:/usr/app/
-      - /usr/app/node_modules
     environment:
-      TZ: 'Asia/Tokyo'
+      NODE_ENV: development
       HOST: '0.0.0.0'
       PORT: '3001'
       DB_CONFIG: |
@@ -107,22 +94,22 @@ services:
         }
     ports:
       - 3001:3001
-    entrypoint: ./docker-entrypoint/dev.sh
+    command: >
+      bash -c '
+        npm run migrate:run
+        npm run dev
+      '
 
-  pokemon-client:
-    tty: true
+  pokemon-web:
     build:
-      context: ../pokemon-client
       dockerfile: Dev.Dockerfile
-    volumes:
-      - ../pokemon-client/:/usr/app/
-      - /usr/app/node_modules
     environment:
       NODE_ENV: development
       API_BASE_URL: 'http://localhost:3001/'
     ports:
       - '8080:8080'
-    entrypoint: ./scripts/dev.sh
+      - '6006:6006'
+    command: bash -c 'npm run storybook & npm run serve'
 
 networks:
   swagger_link:
