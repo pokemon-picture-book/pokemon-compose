@@ -80,6 +80,8 @@ services:
     depends_on:
       - sonarqube-db
       - sonarqube
+    volumes:
+      - ../pokemon-api/:/usr/app/
     environment:
       NODE_ENV: development
       HOST: '0.0.0.0'
