@@ -1,6 +1,6 @@
 ## pokemon-compose
 ### 概要
-pokemon-api + pokemon-client + sonarqube + postgres + swagger-editor + swagger-ui + apisprout
+pokemon-api + pokemon-web + sonarqube + postgres + swagger-editor + swagger-ui + apisprout
 
 
 ### docker 操作手順
