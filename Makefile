@@ -13,6 +13,10 @@ set-env := export ENV=$(ENV) ;\
            export COMPOSE_PATH_SEPARATOR=: ;\
            export COMPOSE_FILE=docker-compose.yml:docker-compose.$(ENV).yml ;
 
+.PHONY: logs
+logs:
+	docker logs -f $(CONTAINER_NAMES)
+
 .PHONY: ps
 ps:
 	docker-compose ps $(CONTAINER_NAMES)
@@ -25,6 +29,11 @@ rm:
 up: pre
 	$(set-env)\
 	docker-compose up -d $(CONTAINER_NAMES)
+
+.PHONY: restart
+restart: pre
+	$(set-env)\
+	docker-compose restart $(CONTAINER_NAMES)
 
 .PHONY: down
 down: pre
