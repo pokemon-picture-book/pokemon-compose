@@ -4,12 +4,12 @@
 ENV=local
 CONTAINER_NAMES=$(filter-out $@,$(MAKECMDGOALS))
 
-pre:
+set-env:
 ifdef e
-ENV=${e}
+	ENV=${e}
 endif
 
-set-env := export ENV=$(ENV) ;\
+set-docker-env := export ENV=$(ENV) ;\
            export COMPOSE_PATH_SEPARATOR=: ;\
            export COMPOSE_FILE=docker-compose.yml:docker-compose.$(ENV).yml ;
 
@@ -26,21 +26,21 @@ rm:
 	docker rm -f $(CONTAINER_NAMES)
 
 .PHONY: up
-up: pre
-	$(set-env)\
+up: set-env init-web
+	$(set-docker-env)\
 	docker-compose up -d $(CONTAINER_NAMES)
 
 .PHONY: restart
-restart: pre
-	$(set-env)\
+restart: set-env
+	$(set-docker-env)\
 	docker-compose restart $(CONTAINER_NAMES)
 
 .PHONY: down
-down: pre
-	$(set-env)\
+down: set-env
+	$(set-docker-env)\
 	docker-compose down
 
 .PHONY: rebuild
-rebuild: pre
-	$(set-env)\
+rebuild: set-env
+	$(set-docker-env)\
 	docker-compose build --no-cache $(CONTAINER_NAMES)
