@@ -9,6 +9,11 @@ ifdef e
 	ENV=${e}
 endif
 
+init-web:
+ifeq ($(findstring pokemon-web,$(CONTAINER_NAMES)), pokemon-web)
+	rsync -r ../pokemon.json/img/* ../pokemon-web/src/assets/pokemon-img
+endif
+
 set-docker-env := export ENV=$(ENV) ;\
            export COMPOSE_PATH_SEPARATOR=: ;\
            export COMPOSE_FILE=docker-compose.yml:docker-compose.$(ENV).yml ;
