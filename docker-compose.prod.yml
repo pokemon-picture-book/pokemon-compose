@@ -30,7 +30,7 @@ services:
     command: >
       bash -c '
         npm run migrate:run &&
-        npm start
+        npm run prod
       '
 
   pokemon-web:
